@@ -19,3 +19,4 @@ matplotlib
 seaborn
 
 # yolo download model=yolov8n.pt
+flask-cors

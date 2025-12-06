@@ -2,7 +2,7 @@
 Inference Engine (B3 + C1)
 Frame Grabber → YOLO Detector → Metrics → JSON Output → FPS Logger
 """
-
+import requests
 import cv2
 import time
 import json
@@ -96,6 +96,11 @@ class InferenceEngine:
                 "metrics": metrics,
                 "alerts": alerts
             }
+            try:
+                 requests.post("http://127.0.0.1:5001/update", json=output, timeout=0.05)
+            except:
+                   pass  # ignore connection errors if backend not running
+
 
 
             print(json.dumps(output, indent=2))
