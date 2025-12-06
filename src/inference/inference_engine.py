@@ -13,6 +13,8 @@ from src.metrics.traffic_metrics import TrafficMetrics
 
 # IMPORT MODEL LOADER
 from src.inference.model_loader import YOLOModelLoader
+from src.alerts.alert_engine import AlertEngine
+
 
 
 class InferenceEngine:
@@ -20,6 +22,7 @@ class InferenceEngine:
         self.stream_url = stream_url
         self.model_loader = YOLOModelLoader(model_path=model_path, device="cpu")
         self.model = self.model_loader.get_model()
+        self.alert_engine = AlertEngine()
 
         print(f"[INFO] Opening camera stream: {stream_url}")
         self.cap = cv2.VideoCapture(stream_url)
@@ -84,12 +87,16 @@ class InferenceEngine:
             fps = self._compute_fps()
 
             # Final Output JSON
+            alerts = self.alert_engine.generate_alerts(metrics, vehicle_detections)
+
             output = {
                 "fps": fps,
                 "num_detections": len(detections_json),
                 "detections": detections_json,
-                "metrics": metrics
+                "metrics": metrics,
+                "alerts": alerts
             }
+
 
             print(json.dumps(output, indent=2))
 
