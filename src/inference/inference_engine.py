@@ -1,15 +1,18 @@
 """
-Inference Engine (B3)
-Frame Grabber → YOLO Detector → Event Generator → JSON Output → FPS Logger
+Inference Engine (B3 + C1)
+Frame Grabber → YOLO Detector → Metrics → JSON Output → FPS Logger
 """
 
 import cv2
 import time
 import json
 from ultralytics import YOLO
-# from .model_loader import YOLOModelLoader
-from src.inference.model_loader import YOLOModelLoader
 
+# IMPORT METRICS MODULE
+from src.metrics.traffic_metrics import TrafficMetrics
+
+# IMPORT MODEL LOADER
+from src.inference.model_loader import YOLOModelLoader
 
 
 class InferenceEngine:
@@ -27,9 +30,9 @@ class InferenceEngine:
         self.prev_time = time.time()
 
     def _compute_fps(self):
-        current = time.time()
-        fps = 1 / (current - self.prev_time)
-        self.prev_time = current
+        now = time.time()
+        fps = 1 / (now - self.prev_time)
+        self.prev_time = now
         return round(fps, 2)
 
     def _detections_to_json(self, results):
@@ -58,19 +61,39 @@ class InferenceEngine:
                 print("[ERROR] Frame read error")
                 break
 
+            # YOLO inference
             results = self.model(frame, verbose=False)[0]
 
+            # Raw detections
             detections_json = self._detections_to_json(results)
+
+            # Compute metrics from detections
+            vehicle_detections = TrafficMetrics.filter_vehicles(detections_json)
+
+            metrics = {
+                "vehicle_count": TrafficMetrics.vehicle_count(vehicle_detections),
+                "class_distribution": TrafficMetrics.class_distribution(vehicle_detections),
+                "congestion_score": TrafficMetrics.congestion_score(
+                    vehicle_detections, frame.shape[1], frame.shape[0]
+                ),
+                "lane_wise": TrafficMetrics.lane_wise_count(
+                    vehicle_detections, frame.shape[1]
+                )
+            }
+
             fps = self._compute_fps()
 
+            # Final Output JSON
             output = {
                 "fps": fps,
                 "num_detections": len(detections_json),
-                "detections": detections_json
+                "detections": detections_json,
+                "metrics": metrics
             }
 
             print(json.dumps(output, indent=2))
 
+            # Display annotated frame
             if display:
                 annotated = results.plot()
                 cv2.imshow("Inference Engine - Press Q to exit", annotated)
