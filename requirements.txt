@@ -1,0 +1,14 @@
+ultralytics
+opencv-python 
+numpy 
+pyyaml 
+flask 
+streamlit
+psutil 
+requests
+onnx 
+onnxruntime 
+onnxruntime-gpu
+tqdm 
+matplotlib 
+seaborn
