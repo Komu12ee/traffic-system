@@ -31,5 +31,5 @@ def test_stream(url):
 
 if __name__ == "__main__":
     # Replace with your phone camera URL
-    stream_url = "http://10.224.240.144:8080/video"
+    stream_url = "http://10.243.180.130:8080/video"
     test_stream(stream_url)
