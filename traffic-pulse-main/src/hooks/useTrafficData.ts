@@ -2,7 +2,10 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { TrafficData, TimeSeriesPoint } from '@/types/traffic';
 
 // Backend API endpoint
-const API_URL = 'http://127.0.0.1:5001/latest';
+// Backend API endpoint — uses Vite env var VITE_API_URL if present, otherwise localhost for dev
+const BASE_API = (import.meta && import.meta.env && import.meta.env.VITE_API_URL) || 'http://127.0.0.1:5001';
+const API_URL = BASE_API.replace(/\/$/, '') + '/latest';
+
 
 // Polling interval (1 second)
 const POLLING_INTERVAL = 1000;

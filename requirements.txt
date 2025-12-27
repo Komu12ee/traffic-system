@@ -1,7 +1,7 @@
 ultralytics
 opencv-python 
 # pip install onnxslim==0.1.74
-pip install onnxruntime==1.16.3
+# pip install onnxruntime==1.16.3
 
 
 numpy==1.26.4

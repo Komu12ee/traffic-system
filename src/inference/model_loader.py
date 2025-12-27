@@ -10,35 +10,31 @@ import os
 
 
 class YOLOModelLoader:
-    def __init__(self, model_path="yolov8n.pt", device=None):
-        """
-        model_path : path to YOLO weights or ONNX file
-        device : "cpu" or "cuda". If None → auto-select.
-        """
+    def __init__(self, model_path="yolov8n.pt", device="auto"):
+        # Device select
+        if device == "auto":
+            self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        else:
+            self.device = device
 
-        # Auto-device selection
-        if device is None:
-            device = "cuda" if torch.cuda.is_available() else "cpu"
+        print(f"[INFO] Selected device: {self.device}")
 
-        self.device = device
-        self.model_path = model_path
-
-        print(f"[INFO] Loading YOLO model: {model_path}")
-        print(f"[INFO] Device selected: {self.device}")
-
-        # Load YOLOv8 model
+        # Load YOLO model
         self.model = YOLO(model_path)
+
+        # Move to device (GPU/CPU)
         self.model.to(self.device)
 
-        print("[INFO] YOLO model loaded successfully.")
+        # ❌ IMPORTANT: yahan .half() MAT LAGANA abhi
+        # self.model.model.half()  # <-- remove this if you had it
 
-    def predict(self, frame):
-        """
-        Runs inference on a single frame.
-        Returns YOLO results object.
-        """
-        results = self.model(frame, verbose=False)
-        return results
+        # Debug info
+        try:
+            p = next(self.model.model.parameters())
+            print("[INFO] Model param device:", p.device)
+            print("[INFO] Model param dtype :", p.dtype)
+        except Exception:
+            pass
 
     def get_model(self):
         return self.model

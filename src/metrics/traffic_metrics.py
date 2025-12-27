@@ -15,11 +15,30 @@ VEHICLE_CLASSES = {
 class TrafficMetrics:
     
     @staticmethod
+    @staticmethod
     def filter_vehicles(detections):
         """
-        Keep only relevant vehicle classes.
+        Keep only vehicle detections and group them into LIGHT / HEAVY categories
         """
-        return [d for d in detections if d["class_id"] in VEHICLE_CLASSES]
+    
+        vehicles = []
+    
+        for det in detections:
+            name = det["class_name"]
+    
+            # Keep only relevant traffic vehicles
+            if name not in ["car", "truck", "bus", "motorcycle", "van"]:
+                continue
+             
+            # ✅ Vehicle grouping – Accuracy fix
+            if name in ["truck", "bus"]:
+                det["vehicle_group"] = "heavy"
+            else:
+                det["vehicle_group"] = "light"
+    
+            vehicles.append(det)
+    
+        return vehicles
 
     @staticmethod
     def vehicle_count(detections):

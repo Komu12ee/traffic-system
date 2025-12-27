@@ -7,6 +7,11 @@ Serves latest event to dashboard frontend
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import threading
+from flask import Response
+import cv2
+import time
+latest_encoded_frame = None
+
 
 app = Flask(__name__)
 CORS(app)
