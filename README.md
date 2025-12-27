@@ -1,27 +1,4 @@
-# ✅ Step A3 — Create README.md Professional Skeleton
 
-(We will fill this later, but structure MUST be ready now.)
-
----
-
-🎯 **Objective (1 line)**
-Create a clean, professional README skeleton aligned with your assessment rubric and final deliverables.
-
----
-
-🧠 **Why this step matters (Hinglish)**
-Teacher aur evaluator sabse pehle **README.md** dekhte hain.
-Agar yeh structured hoga → project professional lagega, aur run karna easy ho jaayega.
-Isme hum scope, architecture, setup steps sab define karenge.
-
----
-
-# 🛠️ Put this content into your `README.md`
-
-Copy–paste the following into:
-`edge-ai-traffic-poc/README.md`
-
----
 
 ## 📌 **Edge AI Smart Traffic Analytics — Proof of Concept**
 
