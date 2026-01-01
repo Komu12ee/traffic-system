@@ -22,11 +22,13 @@ export function ErrorState({ message, onRetry }: ErrorStateProps) {
         <div className="bg-card border border-border rounded-lg p-4 text-left mb-6">
           <p className="text-xs text-muted-foreground mb-2">Expected endpoint:</p>
           <code className="text-sm font-mono text-primary">
+            {/* GET https://10komu-traffic-camera.hf.space/latest */}
+
             GET http://127.0.0.1:5001/latest
           </code>
         </div>
         {onRetry && (
-          <Button 
+          <Button
             onClick={onRetry}
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
