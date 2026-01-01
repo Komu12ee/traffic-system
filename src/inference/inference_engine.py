@@ -177,7 +177,7 @@ class InferenceEngine:
             }
 
             # Backend update (configurable via BACKEND_URL env var)
-            backend_url = os.getenv("BACKEND_URL", "http://127.0.0.1:5001/update")
+            backend_url = os.getenv("BACKEND_URL", "https://10komu-traffic-camera.hf.space/update")
             timeout = float(os.getenv("BACKEND_TIMEOUT", "0.5"))
 
             try:

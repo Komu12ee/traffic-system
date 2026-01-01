@@ -3,7 +3,7 @@ import { TrafficData, TimeSeriesPoint } from '@/types/traffic';
 
 // Backend API endpoint
 // Backend API endpoint — uses Vite env var VITE_API_URL if present, otherwise localhost for dev
-const BASE_API = (import.meta && import.meta.env && import.meta.env.VITE_API_URL) || 'http://127.0.0.1:5001';
+const BASE_API = (import.meta && import.meta.env && import.meta.env.VITE_API_URL) || 'https://10komu-traffic-camera.hf.space';
 const API_URL = BASE_API.replace(/\/$/, '') + '/latest';
 
 
