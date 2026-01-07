@@ -169,6 +169,17 @@ npm run dev
 
 ---
 
+## How It Works
+1. Capture: `VideoLoader` yields frames from a video file or camera.
+2. Detect & track: `InferenceEngine` runs `YOLO.track()` and converts results to JSON.
+3. Metrics: `TrafficMetrics` computes vehicle count, class distribution, congestion score (sum of bbox areas / frame area), and lane-wise counts.
+4. Logging: `VehicleLogger` appends detections to `vehicle_log.csv` for later review.
+5. Send: every N frames the engine schedules an async POST to `BACKEND_URL` (default points to the HF Space URL). The inference loop itself is not blocked by network I/O.
+6. Backend: `api_server.py` stores incoming payloads in an in-memory deque and returns the latest via `/latest` for the dashboard.
+7. Dashboard: the React frontend polls `/latest` and updates charts, cards and alerts.
+
+---
+
 ## 🧠 Engineering Learnings
 
 * Edge inference must be decoupled from network I/O
@@ -200,16 +211,5 @@ Key notes
 - `inference_engine.py` rate-limits sends (`SEND_EVERY_N`) and uses a background worker (`ThreadPoolExecutor`) to avoid blocking inference.
 - `api_server.py` keeps a small in-memory ring buffer (deque) of recent events and serves the latest via `/latest`.
 - Frontend `useTrafficData.ts` polls the backend and falls back to demo data if the backend is unreachable.
-
----
-
-## How It Works
-1. Capture: `VideoLoader` yields frames from a video file or camera.
-2. Detect & track: `InferenceEngine` runs `YOLO.track()` and converts results to JSON.
-3. Metrics: `TrafficMetrics` computes vehicle count, class distribution, congestion score (sum of bbox areas / frame area), and lane-wise counts.
-4. Logging: `VehicleLogger` appends detections to `vehicle_log.csv` for later review.
-5. Send: every N frames the engine schedules an async POST to `BACKEND_URL` (default points to the HF Space URL). The inference loop itself is not blocked by network I/O.
-6. Backend: `api_server.py` stores incoming payloads in an in-memory deque and returns the latest via `/latest` for the dashboard.
-7. Dashboard: the React frontend polls `/latest` and updates charts, cards and alerts.
 
 ---
