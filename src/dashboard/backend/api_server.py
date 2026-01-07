@@ -10,37 +10,37 @@ import threading
 from flask import Response
 import cv2
 import time
+from collections import deque
+
 latest_encoded_frame = None
 
 
 app = Flask(__name__)
 CORS(app)
 
-latest_event = {}   # Global shared state
+# latest_event = {}   # Global shared state
+# lock = threading.Lock()
+event_queue = deque(maxlen=10)  # last 10 events store
 lock = threading.Lock()
 
 
 @app.route("/update", methods=["POST"])
 def update():
-    """
-    Inference engine sends data here every frame.
-    """
-    global latest_event
     data = request.json
 
     with lock:
-        latest_event = data
+        event_queue.append(data)
 
     return {"status": "ok"}, 200
 
 
 @app.route("/latest", methods=["GET"])
 def latest():
-    """
-    Dashboard fetches latest analytics here.
-    """
     with lock:
-        return jsonify(latest_event)
+        if len(event_queue) == 0:
+            return jsonify({}), 200
+
+        return jsonify(event_queue[-1]), 200
 
 
 if __name__ == "__main__":
