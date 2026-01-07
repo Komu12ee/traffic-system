@@ -223,7 +223,7 @@ class InferenceEngine:
                 self.backend_executor.submit(
                     self._send_to_backend,
                     backend_url,
-                    light_output,
+                    output,
                     timeout
                 )
     
