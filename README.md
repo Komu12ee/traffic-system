@@ -1,32 +1,3 @@
-# 🚦 Traffic Pulse — Edge–Cloud AI Traffic Monitoring System
-
-## 📌 Overview
-
-**Traffic Pulse** is a real-time **Edge AI traffic analytics system** that performs high-speed vehicle detection and traffic analysis on an **edge GPU**, while asynchronously streaming **lightweight analytics** to a **cloud-hosted backend** for visualization.
-
-The system is designed with a strong focus on **performance engineering, edge–cloud decoupling, and real-world deployment constraints**, rather than just model accuracy.
-
----
-
-## 🎯 Key Objectives
-
-- Perform **real-time vehicle detection and tracking** using YOLOv8
-- Maintain **stable FPS on edge hardware**
-- Avoid inference slowdown due to network latency
-- Serve traffic analytics to a **cloud dashboard**
-- Design a system that works reliably in **cloud environments (HF Spaces)**
-
----
-
-## 🏗️ Final Architecture
-
-
-### Core Design Principle
-> **Inference must never depend on network speed.**
-
----
-
-## 🔁 End-to-End Data Flow
 
 # 🚦 Traffic Pulse — Edge–Cloud AI Traffic Monitoring System
 
@@ -224,25 +195,6 @@ npm run dev
 M.Tech (Data Science & Artificial Intelligence)
 Focus: Edge AI, Applied ML, MLOps
 
-│  │  └─ export_onnx.py             # (helper for ONNX export)
-│  ├─ dashboard/
-│  │  └─ backend/
-│  │     └─ api_server.py           # Flask API: POST /update, GET /latest (in-memory buffer)
-│  ├─ stream/
-│  │  └─ video_loader.py            # Video capture abstraction
-│  ├─ metrics/
-│  │  └─ traffic_metrics.py         # Vehicle filters, congestion, lane counts
-│  ├─ alerts/
-│  │  └─ alert_engine.py            # Alert generation logic
-│  └─ utils/
-│     ├─ emailer.py                 # Send log/email helper
-│     └─ logger.py                  # CSV logger for detections
-└─ traffic-pulse-main/              # Frontend (Vite + React + TypeScript)
-   ├─ package.json
-   └─ src/
-      ├─ hooks/useTrafficData.ts    # Polls `/latest`, demo fallback + history
-      └─ components/                # Dashboard UI components
-```
 
 Key notes
 - `inference_engine.py` rate-limits sends (`SEND_EVERY_N`) and uses a background worker (`ThreadPoolExecutor`) to avoid blocking inference.
